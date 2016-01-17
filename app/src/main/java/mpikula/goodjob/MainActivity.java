@@ -1,8 +1,14 @@
 package mpikula.goodjob;
 
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,9 +18,48 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import com.mpikula.goodjob.R;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, NavigationView.OnLongClickListener {
+
+    private Button mButtonSzukaj;
+    private EditText mEditTextPraca;
+    private EditText mEditTextMiejsce;
+
+    public static String nazwaStanowiska;
+    public static String nazwaMiejscowosci;
+
+    ArrayList<String> arrayFav = new ArrayList<String>();
+    ArrayList<String> arrayLin = new ArrayList<String>();
+
+    private ListView mDrawerList;
+    public ArrayAdapter<String> mAdapter;
+
+    private Settings mSettings;
+
+    int count = 0;
+
+
+    /*ArrayList<String> arrayFav = new ArrayList<String>(){{
+        add("Junior Androd Developer");
+        add("Java Developer");
+        add("Android Developer");
+    }};*/
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,11 +68,13 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        mDrawerList = (ListView)findViewById(R.id.navList);
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Daj znać, czy Ci się podoba! :)", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -40,6 +87,175 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        mButtonSzukaj = (Button) findViewById(R.id.buttonSzukaj);
+
+        mEditTextPraca = (EditText)findViewById(R.id.editTextPraca);
+        mEditTextPraca.setText("junior developer");
+
+        mEditTextMiejsce = (EditText)findViewById(R.id.editTextMiejsce);
+        mEditTextMiejsce.setText("Wroclaw");
+
+        mButtonSzukaj.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                count++;
+                Toast.makeText(MainActivity.this, "Licznik: "+count, Toast.LENGTH_LONG).show();
+
+                if (TextUtils.isEmpty(mEditTextPraca.getText().toString()) && (TextUtils.isEmpty(mEditTextMiejsce.getText().toString()))) {
+                    mEditTextPraca.setError("Pole obowiązkowe!");
+                    mEditTextMiejsce.setError("Pole obowiązkowe!");
+                    return;
+                } else if (TextUtils.isEmpty(mEditTextPraca.getText().toString())) {
+                    mEditTextPraca.setError("Pole obowiązkowe!");
+                    return;
+                } else if (TextUtils.isEmpty(mEditTextMiejsce.getText().toString())) {
+                    mEditTextMiejsce.setError("Pole obowiązkowe!");
+                    return;
+                } else {
+                    nazwaStanowiska = mEditTextPraca.getText().toString();
+                    nazwaMiejscowosci = mEditTextMiejsce.getText().toString();
+                    Intent myIntent = new Intent(MainActivity.this, ListviewActivity.class);
+                    MainActivity.this.startActivityForResult(myIntent, 1);
+
+                }
+            }
+        });
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Toast.makeText(this, "onActivityResult", Toast.LENGTH_LONG).show();
+
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1) {
+            if(resultCode == RESULT_OK){
+
+                int click  = 1;
+                click++;
+
+                arrayFav.clear();
+                arrayLin.clear();
+                ArrayList<String> passedText = data.getStringArrayListExtra("text");
+                ArrayList<String> passedLink = data.getStringArrayListExtra("link");
+                //arrayFav.clear();
+                //arrayLin.clear();
+
+                //arrayLin.remove(0);
+                arrayFav.addAll(passedText);
+                arrayLin.addAll(passedLink);
+
+                NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+                Menu mainMenu = navigationView.getMenu();
+                Menu subMenu = mainMenu.addSubMenu("Ulubione oferty: "+mEditTextPraca.getText().toString());
+
+                for (int i = 0; i < arrayFav.size(); i++) {
+                    MenuItem item = subMenu.add(arrayFav.get(i));
+
+                    final int count = i;
+                    item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            Toast.makeText(MainActivity.this, "THIS IS A TEST" + count, Toast.LENGTH_SHORT).show();
+
+                            /*Intent myBrowserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(arrayLin.get(count)));
+                            myBrowserIntent.putExtra("paramPosition", count);
+                            startActivity(myBrowserIntent);*/
+
+
+                            Toast.makeText(MainActivity.this, count+" "+arrayLin.toString(), Toast.LENGTH_LONG).show();
+
+                            return false;
+                        }
+                    });
+                }
+            }
+        }
+    }
+
+    public void onExportPressed(){
+
+        CharSequence colors[] = new CharSequence[] {"SMS", "E-mail", "Plik", "Wstecz"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Eksportuj jako:");
+        builder.setItems(colors, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0: //Sms
+                        Uri uri = Uri.parse("smsto:");
+                        Intent it = new Intent(Intent.ACTION_SENDTO, uri);
+                        it.putExtra("sms_body", arrayFav.toString());
+                        startActivity(it);
+                        break;
+
+                    case 1: //Email
+                        Intent intent = new Intent(Intent.ACTION_SEND);
+                        intent.setType("text/html");
+                        intent.putExtra(Intent.EXTRA_EMAIL, "emailaddress@emailaddress.com");
+                        intent.putExtra(Intent.EXTRA_SUBJECT, "Oferty pracy");
+                        intent.putExtra(Intent.EXTRA_TEXT, arrayFav.toString());
+                        startActivity(Intent.createChooser(intent, "Send Email"));
+                        break;
+
+                    case 2: //Plik
+                        File root = android.os.Environment.getExternalStorageDirectory();
+
+                        File dir = new File(root.getAbsolutePath() + "/download");
+
+
+                        Toast.makeText(getApplicationContext(), "Eksport do pliku: " + dir.toString(), Toast.LENGTH_LONG).show();
+
+                        dir.mkdirs();
+                        File file = new File(dir, "myData.txt");
+
+                        try {
+                            FileOutputStream f = new FileOutputStream(file);
+                            PrintWriter pw = new PrintWriter(f);
+
+                            for (int i = 0; i < arrayFav.size(); i++) {
+                                pw.println(arrayFav.get(i).toString());
+                            }
+                            pw.flush();
+                            pw.close();
+                            f.close();
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+
+                    case 3: //Wstecz
+                        break;
+                }
+            }
+        });
+        builder.show();
+
+    }
+
+    public void onExitPressed(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setMessage("Koniec szukania pracy?");
+        builder.setPositiveButton("Tak", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        builder.setNegativeButton("Nie", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     @Override
@@ -80,22 +296,21 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camara) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        if (id == R.id.nav_back) {}
+        else if (id == R.id.nav_export) {
+            onExportPressed();
         }
-
+        else if (id == R.id.nav_exit) {
+            onExitPressed();
+        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        Toast.makeText(this, "Dluuugi klik :)", Toast.LENGTH_LONG).show();
+        return false;
     }
 }

@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.mpikula.goodjob.MainActivity"
+            android:name="mpikula.goodjob.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
@@ -26,8 +26,8 @@
         </activity>
         <activity
             android:configChanges="orientation|screenSize"
-            android:name="com.mpikula.goodjob.ListviewActivity"
-            android:label="Lista" >
+            android:name="mpikula.goodjob.ListviewActivity"
+            android:label="Wyniki wyszukiwania" >
         </activity>
     </application>
 
