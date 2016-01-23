@@ -9,6 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -46,19 +47,12 @@ public class MainActivity extends AppCompatActivity
     ArrayList<String> arrayFav = new ArrayList<String>();
     ArrayList<String> arrayLin = new ArrayList<String>();
 
+    Menu subMenu;
+
     private ListView mDrawerList;
     public ArrayAdapter<String> mAdapter;
-
     private Settings mSettings;
-
     int count = 0;
-
-
-    /*ArrayList<String> arrayFav = new ArrayList<String>(){{
-        add("Junior Androd Developer");
-        add("Java Developer");
-        add("Android Developer");
-    }};*/
 
 
     @Override
@@ -87,6 +81,8 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        Menu mainMenu = navigationView.getMenu();
+        subMenu = mainMenu.addSubMenu("Ulubione oferty: ");
 
         mButtonSzukaj = (Button) findViewById(R.id.buttonSzukaj);
 
@@ -101,7 +97,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 count++;
-                Toast.makeText(MainActivity.this, "Licznik: "+count, Toast.LENGTH_LONG).show();
+                //Toast.makeText(MainActivity.this, "Licznik: " + count, Toast.LENGTH_LONG).show();
 
                 if (TextUtils.isEmpty(mEditTextPraca.getText().toString()) && (TextUtils.isEmpty(mEditTextMiejsce.getText().toString()))) {
                     mEditTextPraca.setError("Pole obowiązkowe!");
@@ -125,9 +121,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Toast.makeText(this, "onActivityResult", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "onActivityResult", Toast.LENGTH_LONG).show();
 
         super.onActivityResult(requestCode, resultCode, data);
+
+        subMenu.clear();
 
         if (requestCode == 1) {
             if(resultCode == RESULT_OK){
@@ -135,20 +133,11 @@ public class MainActivity extends AppCompatActivity
                 int click  = 1;
                 click++;
 
-                arrayFav.clear();
-                arrayLin.clear();
                 ArrayList<String> passedText = data.getStringArrayListExtra("text");
                 ArrayList<String> passedLink = data.getStringArrayListExtra("link");
-                //arrayFav.clear();
-                //arrayLin.clear();
 
-                //arrayLin.remove(0);
                 arrayFav.addAll(passedText);
                 arrayLin.addAll(passedLink);
-
-                NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-                Menu mainMenu = navigationView.getMenu();
-                Menu subMenu = mainMenu.addSubMenu("Ulubione oferty: "+mEditTextPraca.getText().toString());
 
                 for (int i = 0; i < arrayFav.size(); i++) {
                     MenuItem item = subMenu.add(arrayFav.get(i));
@@ -157,18 +146,21 @@ public class MainActivity extends AppCompatActivity
                     item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
-                            Toast.makeText(MainActivity.this, "THIS IS A TEST" + count, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "THIS IS A TEST: " + count, Toast.LENGTH_SHORT).show();
 
                             /*Intent myBrowserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(arrayLin.get(count)));
                             myBrowserIntent.putExtra("paramPosition", count);
                             startActivity(myBrowserIntent);*/
 
-
-                            Toast.makeText(MainActivity.this, count+" "+arrayLin.toString(), Toast.LENGTH_LONG).show();
+                            //Toast.makeText(MainActivity.this, arrayLin.toString(), Toast.LENGTH_LONG).show();
+                            //Toast.makeText(MainActivity.this, arrayFav.size(), Toast.LENGTH_LONG).show();
+                            //Toast.makeText(MainActivity.this, arrayLin.size(), Toast.LENGTH_LONG).show();
 
                             return false;
                         }
                     });
+
+                    item.hasSubMenu();
                 }
             }
         }
@@ -187,8 +179,17 @@ public class MainActivity extends AppCompatActivity
                     case 0: //Sms
                         Uri uri = Uri.parse("smsto:");
                         Intent it = new Intent(Intent.ACTION_SENDTO, uri);
-                        it.putExtra("sms_body", arrayFav.toString());
+
+                        it.putExtra("sms_body", arrayFav.toString() + " " + arrayLin.toString());
+
                         startActivity(it);
+
+                        /*for (int i = 0; i < arrayFav.size(); i++) {
+                            it.putExtra("sms_body", i + 1 + ". " + arrayFav.get(i).toString() + ": " + arrayLin.get(i).toString());
+                            startActivity(it);
+                        }*/
+
+
                         break;
 
                     case 1: //Email
@@ -204,7 +205,6 @@ public class MainActivity extends AppCompatActivity
                         File root = android.os.Environment.getExternalStorageDirectory();
 
                         File dir = new File(root.getAbsolutePath() + "/download");
-
 
                         Toast.makeText(getApplicationContext(), "Eksport do pliku: " + dir.toString(), Toast.LENGTH_LONG).show();
 
@@ -235,7 +235,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
         builder.show();
-
     }
 
     public void onExitPressed(){
@@ -256,6 +255,13 @@ public class MainActivity extends AppCompatActivity
         });
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    public void onClearPressed(){
+        DrawerLayout mDrawerLayout;
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout.closeDrawers();
+        subMenu.clear();
     }
 
     @Override
@@ -286,7 +292,6 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -303,14 +308,21 @@ public class MainActivity extends AppCompatActivity
         else if (id == R.id.nav_exit) {
             onExitPressed();
         }
+        else if (id == R.id.nav_clear) {
+            onClearPressed();
+        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onLongClick(View v) {
-        Toast.makeText(this, "Dluuugi klik :)", Toast.LENGTH_LONG).show();
         return false;
     }
 }

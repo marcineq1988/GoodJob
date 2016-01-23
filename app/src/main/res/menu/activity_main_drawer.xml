@@ -6,6 +6,8 @@
             android:title="Cofnij" />
         <item android:id="@+id/nav_export" android:icon="@android:drawable/ic_menu_gallery"
             android:title="Eksportuj" />
+        <item android:id="@+id/nav_clear" android:icon="@android:drawable/ic_delete"
+            android:title="Kasuj ulubione" />
         <item android:id="@+id/nav_exit" android:icon="@android:drawable/ic_menu_slideshow"
             android:title="Zamknij" />
     </group>

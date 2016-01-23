@@ -1,6 +1,7 @@
 package mpikula.goodjob;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import com.mpikula.goodjob.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by Marcin on 2015-05-10.
@@ -44,10 +46,10 @@ public class JobListAdapter extends ArrayAdapter<String> {
 
             //id wzięte z layoutu pojedynczego wiersza listy
             TextView mNazwaOferty = (TextView) convertView.findViewById(R.id.job_name);
-            ImageView mImageAndroKorpo = (ImageView) convertView.findViewById(R.id.imageViewX);
+           // ImageView mImageAndroKorpo = (ImageView) convertView.findViewById(R.id.imageViewX);
 
             mHolder.mNazwaOferty = mNazwaOferty;
-            mHolder.mImageAndroKorpo = mImageAndroKorpo;
+            //mHolder.mImageAndroKorpo = mImageAndroKorpo;
 
             convertView.setTag(mHolder);
         } else {
@@ -59,13 +61,26 @@ public class JobListAdapter extends ArrayAdapter<String> {
         mHolder.mNazwaOferty.setText(mPracaPosition);
 
 
-/*        if (position % 2 == 1) {
-            convertView.setBackgroundColor(Color.WHITE);
-        } else {
-            convertView.setBackgroundColor(Color.LTGRAY);
-        }*/
+        int min = 1;
+        int max = 7;
+
+        Random r = new Random();
+        int randomizer = r.nextInt(max - min + 1) + min;
 
 
+        switch(randomizer){
+            case 1: convertView.setBackgroundResource(R.drawable.job1b);
+                break;
+            case 2: convertView.setBackgroundResource(R.drawable.job2b);
+                break;
+            case 3: convertView.setBackgroundResource(R.drawable.job3b);
+                break;
+            case 4: convertView.setBackgroundResource(R.drawable.job4b);
+                break;
+            case 5: convertView.setBackgroundResource(R.drawable.job5b);
+                break;
+            default: convertView.setBackgroundResource(R.drawable.job6b);
+        }
         return convertView;
     }
 }

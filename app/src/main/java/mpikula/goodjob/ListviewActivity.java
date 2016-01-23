@@ -2,6 +2,7 @@ package mpikula.goodjob;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,7 +10,9 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mpikula.goodjob.R;
@@ -24,6 +27,7 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class ListviewActivity extends ActionBarActivity {
 
@@ -54,6 +58,10 @@ public class ListviewActivity extends ActionBarActivity {
     public ArrayList<String> companyList = new ArrayList<String>();
     public ArrayList<String> jobList = new ArrayList<String>();
 
+    private TextView mSingleJobName;
+
+    public ImageView mImageView;
+
     private ArrayAdapter<String> adapter;
     private JazzyListView mListView;
     //public String doURLpraca = MainActivity.nazwaStanowiska;
@@ -64,6 +72,7 @@ public class ListviewActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listview);
+
 
         mListView = (JazzyListView) findViewById(R.id.list);
         mListView.setTransitionEffect(new FanEffect());
@@ -76,7 +85,6 @@ public class ListviewActivity extends ActionBarActivity {
         new NewThread().execute();
         mAdapter = new JobListAdapter(this, jobList);
         mListView.setAdapter(mAdapter);
-
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -86,9 +94,12 @@ public class ListviewActivity extends ActionBarActivity {
             }
         });
 
+        mSingleJobName = (TextView)findViewById(R.id.job_name);
+
         mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
                     choosedOffer.add(mListaTest1.get(position).toString());
                     choosedLink.add(mListaLinki.get(position).toString());
                     Toast.makeText(getApplicationContext(), "Dodano do ulubionych!", Toast.LENGTH_SHORT).show();
@@ -147,8 +158,6 @@ public class ListviewActivity extends ActionBarActivity {
                     Toast.makeText(getApplicationContext(), "Zmień parametry wyszukiwania!", Toast.LENGTH_LONG).show();
                 }
 
-                //--------------------------------------------------
-
                 //Firmy
                 //Infopraca
                 mListaTest2.clear();
@@ -197,7 +206,6 @@ public class ListviewActivity extends ActionBarActivity {
 
         @Override
         protected void onPostExecute(String result) {
-
             mAdapter.notifyDataSetChanged();
         }
     }
