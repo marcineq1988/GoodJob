@@ -108,9 +108,6 @@ public class ListviewActivity extends ActionBarActivity {
         });
     }
 
-    protected void onPreExecute() {
-    }
-
     public void onBackPressed() {
         Intent intent = new Intent(ListviewActivity.this, MainActivity.class);
         intent.putStringArrayListExtra("text", choosedOffer);

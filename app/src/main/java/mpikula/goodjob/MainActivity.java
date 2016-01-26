@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity
     private Button mButtonSzukaj;
     private EditText mEditTextPraca;
     private EditText mEditTextMiejsce;
+    private ImageView imageJobs;
 
     public static String nazwaStanowiska;
     public static String nazwaMiejscowosci;
@@ -68,7 +70,7 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Daj znać, czy Ci się podoba! :)", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Daj znać, czy Ci się podoba! :)"+"  Marcin Pikula", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -84,13 +86,15 @@ public class MainActivity extends AppCompatActivity
         Menu mainMenu = navigationView.getMenu();
         subMenu = mainMenu.addSubMenu("Ulubione oferty: ");
 
+
+        imageJobs = (ImageView)findViewById(R.id.imageJob);
         mButtonSzukaj = (Button) findViewById(R.id.buttonSzukaj);
 
         mEditTextPraca = (EditText)findViewById(R.id.editTextPraca);
-        mEditTextPraca.setText("junior developer");
+        //mEditTextPraca.setText("junior developer");
 
         mEditTextMiejsce = (EditText)findViewById(R.id.editTextMiejsce);
-        mEditTextMiejsce.setText("Wroclaw");
+        //mEditTextMiejsce.setText("Wroclaw");
 
         mButtonSzukaj.setOnClickListener(new View.OnClickListener() {
 
@@ -197,7 +201,7 @@ public class MainActivity extends AppCompatActivity
                         intent.setType("text/html");
                         intent.putExtra(Intent.EXTRA_EMAIL, "emailaddress@emailaddress.com");
                         intent.putExtra(Intent.EXTRA_SUBJECT, "Oferty pracy");
-                        intent.putExtra(Intent.EXTRA_TEXT, arrayFav.toString());
+                        intent.putExtra(Intent.EXTRA_TEXT, arrayFav.toString()+""+arrayLin.toString());
                         startActivity(Intent.createChooser(intent, "Send Email"));
                         break;
 
@@ -216,7 +220,7 @@ public class MainActivity extends AppCompatActivity
                             PrintWriter pw = new PrintWriter(f);
 
                             for (int i = 0; i < arrayFav.size(); i++) {
-                                pw.println(arrayFav.get(i).toString());
+                                pw.println(arrayFav.get(i).toString()+""+arrayLin.toString());
                             }
                             pw.flush();
                             pw.close();
@@ -283,15 +287,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 

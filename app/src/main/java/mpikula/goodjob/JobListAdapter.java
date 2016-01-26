@@ -62,7 +62,7 @@ public class JobListAdapter extends ArrayAdapter<String> {
 
 
         int min = 1;
-        int max = 7;
+        int max = 13;
 
         Random r = new Random();
         int randomizer = r.nextInt(max - min + 1) + min;
@@ -79,7 +79,19 @@ public class JobListAdapter extends ArrayAdapter<String> {
                 break;
             case 5: convertView.setBackgroundResource(R.drawable.job5b);
                 break;
-            default: convertView.setBackgroundResource(R.drawable.job6b);
+            case 6: convertView.setBackgroundResource(R.drawable.job6b);
+                break;
+            case 7: convertView.setBackgroundResource(R.drawable.job7b);
+                break;
+            case 8: convertView.setBackgroundResource(R.drawable.job8b);
+                break;
+            case 9: convertView.setBackgroundResource(R.drawable.job9b);
+                break;
+            case 10: convertView.setBackgroundResource(R.drawable.job10b);
+                break;
+            case 11: convertView.setBackgroundResource(R.drawable.job11b);
+                break;
+            default: convertView.setBackgroundResource(R.drawable.job12b);
         }
         return convertView;
     }

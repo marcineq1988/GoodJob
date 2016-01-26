@@ -3,11 +3,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:background="@color/backgroundColor"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior" tools:showIn="@layout/app_bar_main"
     tools:context=".MainActivity">
+
+    <ImageView
+        android:id="@+id/imageJob"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:maxHeight="0dp"
+        android:scaleType="fitCenter"
+        android:layout_above="@+id/editTextPraca"
+        android:src="@drawable/tlo" />
+
 
     <EditText
         android:id="@+id/editTextPraca"
@@ -41,9 +53,10 @@
     <Button
         android:id="@+id/buttonSzukaj"
         android:textColor="@android:color/black"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="SZUKAJ"
+        android:background="@color/buttonSearchColor"
 
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
