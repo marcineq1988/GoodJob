@@ -9,7 +9,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -26,8 +25,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.makeramen.roundedimageview.RoundedImageView;
 import com.mpikula.goodjob.R;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -36,6 +35,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Random;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, NavigationView.OnLongClickListener {
 
@@ -43,18 +44,15 @@ public class MainActivity extends AppCompatActivity
     private EditText mEditTextPraca;
     private EditText mEditTextMiejsce;
     private ImageView imageJobs;
-
+    private RoundedImageView circleImageBackground;
     public static String nazwaStanowiska;
     public static String nazwaMiejscowosci;
-
     ArrayList<String> arrayFav = new ArrayList<String>();
     ArrayList<String> arrayLin = new ArrayList<String>();
-
-    Menu subMenu;
-
     private ListView mDrawerList;
     public ArrayAdapter<String> mAdapter;
     private Settings mSettings;
+    Menu subMenu;
     int count = 0;
 
 
@@ -71,7 +69,7 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Daj znać, czy Ci się podoba! :)"+"  Marcin Pikula", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Daj znać, czy Ci się podoba! :)" + "  Marcin Pikula", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -87,8 +85,7 @@ public class MainActivity extends AppCompatActivity
         Menu mainMenu = navigationView.getMenu();
         subMenu = mainMenu.addSubMenu("Ulubione oferty: ");
 
-
-        imageJobs = (ImageView)findViewById(R.id.imageJob);
+        circleImageBackground = (RoundedImageView)findViewById(R.id.imageCircleBackground);
         mButtonSzukaj = (Button) findViewById(R.id.buttonSzukaj);
 
         mEditTextPraca = (EditText)findViewById(R.id.editTextPraca);
@@ -97,9 +94,6 @@ public class MainActivity extends AppCompatActivity
         mEditTextMiejsce = (EditText)findViewById(R.id.editTextMiejsce);
         //mEditTextMiejsce.setText("Wroclaw");
 
-
-
-
         int min = 1;
         int max = 6;
 
@@ -107,15 +101,17 @@ public class MainActivity extends AppCompatActivity
         int randomizer = r.nextInt(max - min + 1) + min;
 
         switch(randomizer){
-            case 1: imageJobs.setBackgroundResource(R.drawable.profil1);
+            case 1: circleImageBackground.setBackgroundResource(R.drawable.mini_profile5);
                 break;
-            case 2: imageJobs.setBackgroundResource(R.drawable.profil2);
+            case 2: circleImageBackground.setBackgroundResource(R.drawable.mini_profile4);
                 break;
-            case 3: imageJobs.setBackgroundResource(R.drawable.profil3);
+            case 3: circleImageBackground.setBackgroundResource(R.drawable.mini_profile3);
                 break;
-            case 4: imageJobs.setBackgroundResource(R.drawable.profil4);
+            case 4: circleImageBackground.setBackgroundResource(R.drawable.mini_profile2);
                 break;
-            default: imageJobs.setBackgroundResource(R.drawable.profil5);
+            default: circleImageBackground.setBackgroundResource(R.drawable.mini_profile1);
+
+
 
         mButtonSzukaj.setOnClickListener(new View.OnClickListener() {
 
@@ -171,7 +167,13 @@ public class MainActivity extends AppCompatActivity
                     item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
-                            Toast.makeText(MainActivity.this, "THIS IS A TEST: " + count, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "Otwieranie oferty... " + count, Toast.LENGTH_SHORT).show();
+
+
+                            Intent myBrowserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(arrayLin.get(count)));
+                            myBrowserIntent.putExtra("paramPosition", count);
+                            startActivity(myBrowserIntent);
+
 
                             /*Intent myBrowserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(arrayLin.get(count)));
                             myBrowserIntent.putExtra("paramPosition", count);
@@ -287,6 +289,13 @@ public class MainActivity extends AppCompatActivity
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerLayout.closeDrawers();
         subMenu.clear();
+        arrayFav.clear();
+        arrayLin.clear();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override
