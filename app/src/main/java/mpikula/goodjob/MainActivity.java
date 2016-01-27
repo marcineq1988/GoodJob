@@ -34,6 +34,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, NavigationView.OnLongClickListener {
@@ -96,6 +97,26 @@ public class MainActivity extends AppCompatActivity
         mEditTextMiejsce = (EditText)findViewById(R.id.editTextMiejsce);
         //mEditTextMiejsce.setText("Wroclaw");
 
+
+
+
+        int min = 1;
+        int max = 6;
+
+        Random r = new Random();
+        int randomizer = r.nextInt(max - min + 1) + min;
+
+        switch(randomizer){
+            case 1: imageJobs.setBackgroundResource(R.drawable.profil1);
+                break;
+            case 2: imageJobs.setBackgroundResource(R.drawable.profil2);
+                break;
+            case 3: imageJobs.setBackgroundResource(R.drawable.profil3);
+                break;
+            case 4: imageJobs.setBackgroundResource(R.drawable.profil4);
+                break;
+            default: imageJobs.setBackgroundResource(R.drawable.profil5);
+
         mButtonSzukaj.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -122,7 +143,7 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
-    }
+    }}
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //Toast.makeText(this, "onActivityResult", Toast.LENGTH_LONG).show();

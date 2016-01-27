@@ -17,8 +17,7 @@
         android:adjustViewBounds="true"
         android:maxHeight="0dp"
         android:scaleType="fitCenter"
-        android:layout_above="@+id/editTextPraca"
-        android:src="@drawable/tlo" />
+        android:layout_above="@+id/editTextPraca" />
 
 
     <EditText
@@ -27,15 +26,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:layout_marginLeft="37dp"
-        android:layout_marginStart="37dp"
 
         android:layout_marginRight="33dp"
-        android:layout_marginEnd="33dp"
-        android:textAlignment="gravity" />
+        android:textAlignment="gravity"
+        android:layout_above="@+id/editTextMiejsce"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="18dp" />
 
     <EditText
         android:id="@+id/editTextMiejsce"
@@ -44,10 +41,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:layout_above="@+id/buttonSzukaj"
-        android:layout_marginBottom="39dp"
-        android:layout_alignLeft="@+id/editTextPraca"
         android:layout_alignStart="@+id/editTextPraca"
-        android:layout_alignRight="@+id/editTextPraca"
         android:layout_alignEnd="@+id/editTextPraca" />
 
     <Button
@@ -58,14 +52,10 @@
         android:text="SZUKAJ"
         android:background="@color/buttonSearchColor"
 
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:layout_marginLeft="44dp"
-        android:layout_marginStart="44dp"
-        android:layout_alignParentBottom="true"
 
         android:layout_marginRight="45dp"
-        android:layout_marginEnd="45dp"
-        android:layout_marginBottom="37dp"
-        android:textSize="20dp" />
+        android:textSize="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>
