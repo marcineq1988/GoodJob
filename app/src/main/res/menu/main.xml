@@ -2,4 +2,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
 
+    <item android:id="@+id/action_menu_name" android:title="@string/menu_name"
+        android:orderInCategory="100" android:checkable="false" app:showAsAction="never" />
+    <item android:id="@+id/action_menu_item1" android:title="@string/menu_position1"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_menu_item2" android:title="@string/menu_position2"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_menu_item3" android:title="@string/menu_position3"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_menu_item4" android:title="@string/menu_position4"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_menu_item5" android:title="@string/menu_position5"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_menu_item6" android:title="@string/menu_position6"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_menu_item7" android:title="@string/menu_position7"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_menu_item8" android:title="@string/menu_position8"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_menu_item9" android:title="@string/menu_position9"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_menu_item10" android:title="@string/menu_position10"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_menu_item11" android:title="@string/menu_position11"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_menu_item12" android:title="@string/menu_position12"
+        android:orderInCategory="100" app:showAsAction="never" />
 </menu>

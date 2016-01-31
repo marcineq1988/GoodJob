@@ -1,5 +1,6 @@
 package mpikula.goodjob;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -23,6 +24,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.makeramen.roundedimageview.RoundedImageView;
@@ -55,7 +57,6 @@ public class MainActivity extends AppCompatActivity
     Menu subMenu;
     int count = 0;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,12 +66,24 @@ public class MainActivity extends AppCompatActivity
 
         mDrawerList = (ListView)findViewById(R.id.navList);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Daj znać, czy Ci się podoba! :)" + "  Marcin Pikula", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                final Snackbar snackBar = Snackbar.make(findViewById(R.id.fab), R.string.snackbar, Snackbar.LENGTH_INDEFINITE);
+
+                View snackbarView = snackBar.getView();
+                TextView textView = (TextView) snackbarView.findViewById(android.support.design.R.id.snackbar_text);
+                textView.setMaxLines(5);  //set the max lines for textview to show multiple lines
+
+                snackBar.setAction("ZAMKNIJ", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        snackBar.dismiss();
+                    }
+                });
+                snackBar.show();
+
             }
         });
 
@@ -89,29 +102,10 @@ public class MainActivity extends AppCompatActivity
         mButtonSzukaj = (Button) findViewById(R.id.buttonSzukaj);
 
         mEditTextPraca = (EditText)findViewById(R.id.editTextPraca);
-        //mEditTextPraca.setText("junior developer");
+        mEditTextPraca.setText("junior developer");
 
         mEditTextMiejsce = (EditText)findViewById(R.id.editTextMiejsce);
-        //mEditTextMiejsce.setText("Wroclaw");
-
-        int min = 1;
-        int max = 6;
-
-        Random r = new Random();
-        int randomizer = r.nextInt(max - min + 1) + min;
-
-        switch(randomizer){
-            case 1: circleImageBackground.setBackgroundResource(R.drawable.mini_profile5);
-                break;
-            case 2: circleImageBackground.setBackgroundResource(R.drawable.mini_profile4);
-                break;
-            case 3: circleImageBackground.setBackgroundResource(R.drawable.mini_profile3);
-                break;
-            case 4: circleImageBackground.setBackgroundResource(R.drawable.mini_profile2);
-                break;
-            default: circleImageBackground.setBackgroundResource(R.drawable.mini_profile1);
-
-
+        mEditTextMiejsce.setText("Wroclaw");
 
         mButtonSzukaj.setOnClickListener(new View.OnClickListener() {
 
@@ -135,14 +129,15 @@ public class MainActivity extends AppCompatActivity
                     nazwaMiejscowosci = mEditTextMiejsce.getText().toString();
                     Intent myIntent = new Intent(MainActivity.this, ListviewActivity.class);
                     MainActivity.this.startActivityForResult(myIntent, 1);
-
+                    ListviewActivity.mListaTest1.clear();
+                    ListviewActivity.mListaTest2.clear();
+                    ListviewActivity.mListaLinki.clear();
                 }
             }
         });
-    }}
+    }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //Toast.makeText(this, "onActivityResult", Toast.LENGTH_LONG).show();
 
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -168,21 +163,9 @@ public class MainActivity extends AppCompatActivity
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
                             Toast.makeText(MainActivity.this, "Otwieranie oferty... " + count, Toast.LENGTH_SHORT).show();
-
-
                             Intent myBrowserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(arrayLin.get(count)));
                             myBrowserIntent.putExtra("paramPosition", count);
                             startActivity(myBrowserIntent);
-
-
-                            /*Intent myBrowserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(arrayLin.get(count)));
-                            myBrowserIntent.putExtra("paramPosition", count);
-                            startActivity(myBrowserIntent);*/
-
-                            //Toast.makeText(MainActivity.this, arrayLin.toString(), Toast.LENGTH_LONG).show();
-                            //Toast.makeText(MainActivity.this, arrayFav.size(), Toast.LENGTH_LONG).show();
-                            //Toast.makeText(MainActivity.this, arrayLin.size(), Toast.LENGTH_LONG).show();
-
                             return false;
                         }
                     });
@@ -196,7 +179,6 @@ public class MainActivity extends AppCompatActivity
     public void onExportPressed(){
 
         CharSequence colors[] = new CharSequence[] {"SMS", "E-mail", "Plik", "Wstecz"};
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Eksportuj jako:");
         builder.setItems(colors, new DialogInterface.OnClickListener() {
@@ -215,8 +197,6 @@ public class MainActivity extends AppCompatActivity
                             it.putExtra("sms_body", i + 1 + ". " + arrayFav.get(i).toString() + ": " + arrayLin.get(i).toString());
                             startActivity(it);
                         }*/
-
-
                         break;
 
                     case 1: //Email
@@ -224,26 +204,21 @@ public class MainActivity extends AppCompatActivity
                         intent.setType("text/html");
                         intent.putExtra(Intent.EXTRA_EMAIL, "emailaddress@emailaddress.com");
                         intent.putExtra(Intent.EXTRA_SUBJECT, "Oferty pracy");
-                        intent.putExtra(Intent.EXTRA_TEXT, arrayFav.toString()+""+arrayLin.toString());
+                        intent.putExtra(Intent.EXTRA_TEXT, arrayFav.toString() + "" + arrayLin.toString());
                         startActivity(Intent.createChooser(intent, "Send Email"));
                         break;
 
                     case 2: //Plik
                         File root = android.os.Environment.getExternalStorageDirectory();
-
                         File dir = new File(root.getAbsolutePath() + "/download");
-
                         Toast.makeText(getApplicationContext(), "Eksport do pliku: " + dir.toString(), Toast.LENGTH_LONG).show();
-
                         dir.mkdirs();
                         File file = new File(dir, "myData.txt");
-
                         try {
                             FileOutputStream f = new FileOutputStream(file);
                             PrintWriter pw = new PrintWriter(f);
-
                             for (int i = 0; i < arrayFav.size(); i++) {
-                                pw.println(arrayFav.get(i).toString()+""+arrayLin.toString());
+                                pw.println(arrayFav.get(i).toString() + "" + arrayLin.toString());
                             }
                             pw.flush();
                             pw.close();
@@ -255,7 +230,6 @@ public class MainActivity extends AppCompatActivity
                             e.printStackTrace();
                         }
                         break;
-
                     case 3: //Wstecz
                         break;
                 }
@@ -295,6 +269,10 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onResume() {
+        int[] images = new int[] {R.drawable.mini_profile1, R.drawable.mini_profile2, R.drawable.mini_profile3,R.drawable.mini_profile4, R.drawable.mini_profile5};
+        RoundedImageView mImageView = (RoundedImageView)findViewById(R.id.imageCircleBackground);
+        int imageId = (int)(Math.random() * images.length);
+        mImageView.setBackgroundResource(images[imageId]);
         super.onResume();
     }
 
@@ -306,13 +284,6 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
     }
 
     @Override

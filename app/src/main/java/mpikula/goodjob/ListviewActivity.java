@@ -7,6 +7,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -17,7 +19,18 @@ import android.widget.Toast;
 
 import com.mpikula.goodjob.R;
 import com.twotoasters.jazzylistview.JazzyListView;
+import com.twotoasters.jazzylistview.effects.CardsEffect;
+import com.twotoasters.jazzylistview.effects.CurlEffect;
+import com.twotoasters.jazzylistview.effects.FadeEffect;
 import com.twotoasters.jazzylistview.effects.FanEffect;
+import com.twotoasters.jazzylistview.effects.GrowEffect;
+import com.twotoasters.jazzylistview.effects.HelixEffect;
+import com.twotoasters.jazzylistview.effects.ReverseFlyEffect;
+import com.twotoasters.jazzylistview.effects.SlideInEffect;
+import com.twotoasters.jazzylistview.effects.TiltEffect;
+import com.twotoasters.jazzylistview.effects.TwirlEffect;
+import com.twotoasters.jazzylistview.effects.WaveEffect;
+import com.twotoasters.jazzylistview.effects.ZipperEffect;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -205,5 +218,70 @@ public class ListviewActivity extends ActionBarActivity {
         protected void onPostExecute(String result) {
             mAdapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_menu_name) {
+            return true;
+        }
+        if (id == R.id.action_menu_item1) {
+            mListView.setTransitionEffect(new FanEffect());
+            return true;
+        }
+        if (id == R.id.action_menu_item2) {
+            mListView.setTransitionEffect(new ZipperEffect());
+            return true;
+        }
+        if (id == R.id.action_menu_item3) {
+            mListView.setTransitionEffect(new CurlEffect());
+            return true;
+        }
+        if (id == R.id.action_menu_item4) {
+            mListView.setTransitionEffect(new CardsEffect());
+            return true;
+        }
+        if (id == R.id.action_menu_item5) {
+            mListView.setTransitionEffect(new FadeEffect());
+            return true;
+        }
+        if (id == R.id.action_menu_item6) {
+            mListView.setTransitionEffect(new HelixEffect());
+            return true;
+        }
+        if (id == R.id.action_menu_item7) {
+            mListView.setTransitionEffect(new ReverseFlyEffect());
+            return true;
+        }
+        if (id == R.id.action_menu_item8) {
+            mListView.setTransitionEffect(new TiltEffect());
+            return true;
+        }
+        if (id == R.id.action_menu_item9) {
+            mListView.setTransitionEffect(new GrowEffect());
+            return true;
+        }
+        if (id == R.id.action_menu_item10) {
+            mListView.setTransitionEffect(new SlideInEffect());
+            return true;
+        }
+        if (id == R.id.action_menu_item11) {
+            mListView.setTransitionEffect(new WaveEffect());
+            return true;
+        }
+        if (id == R.id.action_menu_item12) {
+            mListView.setTransitionEffect(new TwirlEffect());
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

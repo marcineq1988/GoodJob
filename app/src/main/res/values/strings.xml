@@ -4,5 +4,23 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="action_settings">Settings</string>
+    <string name="menu_name">Wybierz animację:</string>
+    <string name="menu_position1">Wachlarz</string>
+    <string name="menu_position2">Scalenie</string>
+    <string name="menu_position3">Wślizg</string>
+    <string name="menu_position4">Karty</string>
+    <string name="menu_position5">Zanikanie</string>
+    <string name="menu_position6">Spirala</string>
+    <string name="menu_position7">Odwracanie</string>
+    <string name="menu_position8">Nakładanie</string>
+    <string name="menu_position9">Wzrost</string>
+    <string name="menu_position10">Zbliżanie</string>
+    <string name="menu_position11">Fala</string>
+    <string name="menu_position12">Wirowanie</string>
+
+    <string name="info_dialog_title">Informacja</string>
+    <string name="info_dialog_text">No siemanko...</string>
+    <string name="snackbar">GoodJob - Oferty pracy z kilku portali jednocześnie
+        (Pracuj.pl i Infopraca.pl). Autor: Marcin Pikuła 2016. marcin.pikula@wp.pl</string>
+
 </resources>
