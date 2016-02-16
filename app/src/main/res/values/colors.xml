@@ -4,6 +4,12 @@
     <color name="colorPrimaryDark">#c16400</color>
     <color name="colorAccent">#7a3f00</color>
     <color name="backgroundColor">#FFFF8400</color>
+    <color name="buttonSearchBegin">#FFFF8400</color>
+    <color name="buttonSearchClick">#734d25</color>
+
+    <color name="blue_dark">#000561</color>
+    <color name="blue_light">#000dff</color>
+
 
     <color name="buttonSearchColor">#ffffff</color>
 </resources>

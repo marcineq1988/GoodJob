@@ -26,7 +26,6 @@ public class JobListAdapter extends ArrayAdapter<String> {
     //layout z elementami wiersza listy
     public static class PracaViewHolder {
         public TextView mNazwaOferty;
-        public ImageView mImageAndroKorpo;
     }
     //Konstruktor
     public JobListAdapter(Context mContext, List<String> mDane) {
@@ -46,10 +45,8 @@ public class JobListAdapter extends ArrayAdapter<String> {
 
             //id wzięte z layoutu pojedynczego wiersza listy
             TextView mNazwaOferty = (TextView) convertView.findViewById(R.id.job_name);
-           // ImageView mImageAndroKorpo = (ImageView) convertView.findViewById(R.id.imageViewX);
 
             mHolder.mNazwaOferty = mNazwaOferty;
-            //mHolder.mImageAndroKorpo = mImageAndroKorpo;
 
             convertView.setTag(mHolder);
         } else {
@@ -60,13 +57,11 @@ public class JobListAdapter extends ArrayAdapter<String> {
         // Ustawienie danych w widoku
         mHolder.mNazwaOferty.setText(mPracaPosition);
 
-
         int min = 1;
-        int max = 19;  //ma byc 19
+        int max = 19;
 
         Random r = new Random();
         int randomizer = r.nextInt(max - min + 1) + min;
-
 
         switch(randomizer){
             case 1: convertView.setBackgroundResource(R.drawable.job1b);
@@ -103,7 +98,7 @@ public class JobListAdapter extends ArrayAdapter<String> {
                 break;
             case 17: convertView.setBackgroundResource(R.drawable.job17b);
                 break;
-            default: convertView.setBackgroundResource(R.drawable.job18b); //ma byc 18
+            default: convertView.setBackgroundResource(R.drawable.job18b);
         }
         return convertView;
     }

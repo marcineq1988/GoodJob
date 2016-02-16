@@ -1,0 +1,45 @@
+<selector
+xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_pressed="false" >
+        <shape xmlns:android="http://schemas.android.com/apk/res/android">
+            <solid android:color="@color/buttonSearchBegin" />
+            <stroke android:width="1dp"
+            android:color="@color/buttonSearchBegin" />
+
+            <gradient
+                android:angle="90"
+                android:startColor="#d46c00"
+                android:endColor="#ffc485"
+                android:type="linear" />
+
+            <padding android:left="1dp"
+            android:top="1dp"
+            android:right="1dp"
+            android:bottom="1dp"
+            />
+            <corners android:topLeftRadius="250dip" android:topRightRadius="250dip"/>
+        </shape>
+    </item>
+
+    <item android:state_pressed="true" >
+        <shape xmlns:android="http://schemas.android.com/apk/res/android">
+            <solid android:color="@color/buttonSearchClick" />
+            <stroke android:width="1dp"
+                android:color="@color/buttonSearchClick" />
+
+            <gradient
+                android:angle="90"
+                android:endColor="#d46c00"
+                android:startColor="#ffc485"
+                android:type="linear" />
+
+            <padding android:left="1dp"
+                android:top="1dp"
+                android:right="1dp"
+                android:bottom="1dp"
+                />
+            <corners android:topLeftRadius="250dip" android:topRightRadius="250dip"/>
+        </shape>
+    </item>
+</selector>

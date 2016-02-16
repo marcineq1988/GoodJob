@@ -4,7 +4,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="menu_name">Wybierz animację:</string>
+    <string name="menu_name">Wybierz animację listy:</string>
     <string name="menu_position1">Wachlarz</string>
     <string name="menu_position2">Scalenie</string>
     <string name="menu_position3">Wślizg</string>
@@ -17,10 +17,11 @@
     <string name="menu_position10">Zbliżanie</string>
     <string name="menu_position11">Fala</string>
     <string name="menu_position12">Wirowanie</string>
+    <string name="upText">Wirowanie</string>
 
     <string name="info_dialog_title">Informacja</string>
     <string name="info_dialog_text">No siemanko...</string>
-    <string name="snackbar">GoodJob - Oferty pracy z kilku portali jednocześnie
+    <string name="info">GoodJob - Oferty pracy z kilku portali jednocześnie
         (Pracuj.pl i Infopraca.pl). Autor: Marcin Pikuła 2016. marcin.pikula@wp.pl</string>
 
 </resources>

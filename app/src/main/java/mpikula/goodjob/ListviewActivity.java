@@ -63,7 +63,7 @@ public class ListviewActivity extends ActionBarActivity {
     static List<String> mListaFirmy = new ArrayList<>();
 
     private JobListAdapter mAdapter;
-    public Elements jobName, jobName2, jobNameComp, jobName2Comp;
+    public Elements jobName, jobName2, jobNameComp, jobName2Comp, noResults1, noResults2;
     private ProgressBar mProgress;
     private Context context;
 
@@ -71,12 +71,16 @@ public class ListviewActivity extends ActionBarActivity {
     public ArrayList<String> companyList = new ArrayList<String>();
     public ArrayList<String> jobList = new ArrayList<String>();
 
+
     private TextView mSingleJobName;
 
     public ImageView mImageView;
 
+    static int id = 1;
+    static String idAsString;
+
     private ArrayAdapter<String> adapter;
-    private JazzyListView mListView;
+    static JazzyListView mListView;
     //public String doURLpraca = MainActivity.nazwaStanowiska;
     //public String doURLmiejsce = MainActivity.nazwaMiejscowosci;
 
@@ -113,13 +117,14 @@ public class ListviewActivity extends ActionBarActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
-                    choosedOffer.add(mListaTest1.get(position).toString());
-                    choosedLink.add(mListaLinki.get(position).toString());
-                    Toast.makeText(getApplicationContext(), "Dodano do ulubionych!", Toast.LENGTH_SHORT).show();
-                    return true;
-                }
+                choosedOffer.add(mListaTest1.get(position).toString());
+                choosedLink.add(mListaLinki.get(position).toString());
+                Toast.makeText(getApplicationContext(), "Dodano do ulubionych!", Toast.LENGTH_SHORT).show();
+                return true;
+            }
         });
     }
+
 
     public void onBackPressed() {
         Intent intent = new Intent(ListviewActivity.this, MainActivity.class);
@@ -132,71 +137,121 @@ public class ListviewActivity extends ActionBarActivity {
     public class NewThread extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... arg) {
-            String doURLwork = mainActiv.nazwaStanowiska;
-            String doURLplace = mainActiv.nazwaMiejscowosci;
 
+            int passedNumber = mainActiv.animationNumberToPass;
+
+            if(passedNumber !=0){
+                id = passedNumber;
+            }
+            else{
+                id = 12;
+            }
+            choose();
+
+            //sjfbkbkbdbgkjdg
+
+            //Pozbywanie sie polskich znakow
+            String doURLwork = mainActiv.nazwaStanowiska;
+            String aResultURLwork = doURLwork.replaceAll("ą", "a");
+            String cResultURLwork = aResultURLwork.replaceAll("ć", "c");
+            String eResultURLwork = cResultURLwork.replaceAll("ę", "e");
+            String lResultURLwork = eResultURLwork.replaceAll("ł", "l");
+            String nResultURLwork = lResultURLwork.replaceAll("ń", "n");
+            String oResultURLwork = nResultURLwork.replaceAll("ó", "o");
+            String sResultURLwork = oResultURLwork.replaceAll("ś", "s");
+            String z1ResultURLwork = sResultURLwork.replaceAll("ż", "z");
+            String z2ResultURLwork = z1ResultURLwork.replaceAll("ź", "z");
+            String space1ResultURLwork = z2ResultURLwork.replaceAll("^\\s+", "");
+            String space2ResultURLwork = space1ResultURLwork.replaceAll("\\s+$", "");
+            String ultimateResultURLwork = space2ResultURLwork;
+
+            String doURLplace = mainActiv.nazwaMiejscowosci;
+            String aResultURLplace = doURLplace.replaceAll("ą", "a");
+            String cResultURLplace = aResultURLplace.replaceAll("ć", "c");
+            String eResultURLplace = cResultURLplace.replaceAll("ę", "e");
+            String lResultURLplace = eResultURLplace.replaceAll("ł", "l");
+            String nResultURLplace = lResultURLplace.replaceAll("ń", "n");
+            String oResultURLplace = nResultURLplace.replaceAll("ó", "o");
+            String sResultURLplace = oResultURLplace.replaceAll("ś", "s");
+            String z1ResultURLplace = sResultURLplace.replaceAll("ż", "z");
+            String z2ResultURLplace = z1ResultURLplace.replaceAll("ź", "z");
+            String space1ResultURLplace = z2ResultURLplace.replaceAll("^\\s+", "");
+            String space2ResultURLplace = space1ResultURLplace.replaceAll("\\s+$", "");
+            String ultimateResultURLplace = space2ResultURLplace;
 
             Document doc, doc2;
             Elements classs, lins;
             String uerele;
             try {
-                doc = (Document) Jsoup.connect("http://www.infopraca.pl/praca?q=" + doURLwork + "&lc=" + doURLplace)
+                doc = (Document) Jsoup.connect("http://www.infopraca.pl/praca?q=" + ultimateResultURLwork + "&lc=" + ultimateResultURLplace)
                         .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:5.0) Gecko/20100101 Firefox/5.0").get();
-                doc2 = (Document) Jsoup.connect("http://www.pracuj.pl/praca/" + doURLwork + ";kw/" + doURLplace + ";wp")
+                doc2 = (Document) Jsoup.connect("http://www.pracuj.pl/praca/" + ultimateResultURLwork + ";kw/" + ultimateResultURLplace + ";wp")
                         .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:5.0) Gecko/20100101 Firefox/5.0").get();
 
-                //Oferty
-                jobName = doc.select("h2.p-job-title a[href]"); //Infopraca
-                jobName2 = doc2.select("h2.offer__list_item_link a[href]");  //pracuj.pl
+                //Szukaj div'a z konkretnym ID - pojawia się gdy nie ma wyników wyszukiwania
+                noResults1 = doc.select("div.no-results-block");
+                noResults2 = doc2.select("div.emptyResults");
 
-                //Firmy
-                jobNameComp = doc.select("h3.p-name.company a[href]"); //Infopraca
-                jobName2Comp = doc2.select("h3.offer__list_item_link a[href]");  //pracuj.pl
+                if (noResults1.isEmpty()) {
+                    if(noResults2.isEmpty()){
 
-                //Oferty pracy
-                //Infopraca
-                mListaTest1.clear();
-                for (Element jobNames : jobName) {
-                    mListaTest1.add(jobNames.text() + "\n");
+                        //Oferty
+                        jobName = doc.select("h2.p-job-title a[href]"); //Infopraca
+                        jobName2 = doc2.select("h2.offer__list_item_link a[href]");  //pracuj.pl
+
+                        //Firmy
+                        jobNameComp = doc.select("h3.p-name.company a[href]"); //Infopraca
+                        jobName2Comp = doc2.select("h3.offer__list_item_link a[href]");  //pracuj.pl
+
+                        //Oferty pracy
+                        //Infopraca
+                        mListaTest1.clear();
+                        for (Element jobNames : jobName) {
+                            mListaTest1.add(jobNames.text() + "\n");
+                        }
+
+                        //Pracuj.pl
+                        for (Element jobNames2 : jobName2) {
+                            mListaTest1.add(jobNames2.text() + "\n");
+                        }
+                        if(mListaTest1.size()==0){
+                            Toast.makeText(getApplicationContext(), "Zmień parametry wyszukiwania!", Toast.LENGTH_LONG).show();
+                        }
+
+                        //Firmy
+                        //Infopraca
+                        mListaTest2.clear();
+                        for (Element jobNames : jobNameComp) {
+                            mListaTest2.add(jobNames.text() + "\n");
+                        }
+
+                        //Pracuj.pl
+                        for (Element jobNames2 : jobName2Comp) {
+                            mListaTest2.add(jobNames2.text() + "\n");
+                        }
+
+                        //Linki do ofert
+                        //Infopraca
+                        for (Element link : jobName) {
+                            mListaLinki.add(link.attr("abs:href"));
+                        }
+
+                        //Pracuj.pl
+                        for (Element link : jobName2) {
+                            mListaLinki.add(link.attr("abs:href"));
+                        }
+
+                        //Łączenie wyników - oferta + nazwa firmy
+                        jobList.clear();
+                        for(int i=0; i<mListaTest1.size(); i++){
+                            jobList.add(mListaTest1.get(i)+"\n"+mListaTest2.get(i));
+                        }
+                    }
                 }
-
-                //Pracuj.pl
-                for (Element jobNames2 : jobName2) {
-                    mListaTest1.add(jobNames2.text() + "\n");
+                else{
+                    jobList.add("Brak wyników wyszukiwania!");
+                    zeroResults();
                 }
-                if(mListaTest1.size()==0){
-                    Toast.makeText(getApplicationContext(), "Zmień parametry wyszukiwania!", Toast.LENGTH_LONG).show();
-                }
-
-                //Firmy
-                //Infopraca
-                mListaTest2.clear();
-                for (Element jobNames : jobNameComp) {
-                    mListaTest2.add(jobNames.text() + "\n");
-                }
-
-                //Pracuj.pl
-                for (Element jobNames2 : jobName2Comp) {
-                    mListaTest2.add(jobNames2.text() + "\n");
-                }
-
-                //Linki do ofert
-                //Infopraca
-                for (Element link : jobName) {
-                    mListaLinki.add(link.attr("abs:href"));
-                }
-
-                //Pracuj.pl
-                for (Element link : jobName2) {
-                    mListaLinki.add(link.attr("abs:href"));
-                }
-
-                //Łączenie wyników - oferta + nazwa firmy
-                jobList.clear();
-                for(int i=0; i<mListaTest1.size(); i++){
-                    jobList.add(mListaTest1.get(i)+"\n"+mListaTest2.get(i));
-                }
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -220,68 +275,62 @@ public class ListviewActivity extends ActionBarActivity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+    public void zeroResults(){ //funkcja wywoływana gdy nie ma wyników wyszukiwania
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            }
+        });
+        mListView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                return false;
+            }
+        });
+        mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                return false;
+            }
+        });
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.action_menu_name) {
-            return true;
-        }
-        if (id == R.id.action_menu_item1) {
+    public void choose(){
+        if(id == 1){
             mListView.setTransitionEffect(new FanEffect());
-            return true;
         }
-        if (id == R.id.action_menu_item2) {
+        if (id == 2) {
             mListView.setTransitionEffect(new ZipperEffect());
-            return true;
         }
-        if (id == R.id.action_menu_item3) {
+        if (id == 3) {
             mListView.setTransitionEffect(new CurlEffect());
-            return true;
         }
-        if (id == R.id.action_menu_item4) {
+        if (id == 4) {
             mListView.setTransitionEffect(new CardsEffect());
-            return true;
         }
-        if (id == R.id.action_menu_item5) {
+        if (id == 5) {
             mListView.setTransitionEffect(new FadeEffect());
-            return true;
         }
-        if (id == R.id.action_menu_item6) {
+        if (id == 6) {
             mListView.setTransitionEffect(new HelixEffect());
-            return true;
         }
-        if (id == R.id.action_menu_item7) {
+        if (id == 7) {
             mListView.setTransitionEffect(new ReverseFlyEffect());
-            return true;
         }
-        if (id == R.id.action_menu_item8) {
+        if (id == 8) {
             mListView.setTransitionEffect(new TiltEffect());
-            return true;
         }
-        if (id == R.id.action_menu_item9) {
+        if (id == 9) {
             mListView.setTransitionEffect(new GrowEffect());
-            return true;
         }
-        if (id == R.id.action_menu_item10) {
+        if (id == 10) {
             mListView.setTransitionEffect(new SlideInEffect());
-            return true;
         }
-        if (id == R.id.action_menu_item11) {
+        if (id == 11) {
             mListView.setTransitionEffect(new WaveEffect());
-            return true;
         }
-        if (id == R.id.action_menu_item12) {
+        if (id == 12) {
             mListView.setTransitionEffect(new TwirlEffect());
-            return true;
         }
-        return super.onOptionsItemSelected(item);
     }
 }
