@@ -1,17 +1,11 @@
 package mpikula.goodjob;
 
-import android.app.Dialog;
-import android.content.Context;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.MenuInflater;
@@ -29,33 +23,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
-
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.mpikula.goodjob.R;
-import com.twotoasters.jazzylistview.effects.CardsEffect;
-import com.twotoasters.jazzylistview.effects.CurlEffect;
-import com.twotoasters.jazzylistview.effects.FadeEffect;
-import com.twotoasters.jazzylistview.effects.FanEffect;
-import com.twotoasters.jazzylistview.effects.GrowEffect;
-import com.twotoasters.jazzylistview.effects.HelixEffect;
-import com.twotoasters.jazzylistview.effects.ReverseFlyEffect;
-import com.twotoasters.jazzylistview.effects.SlideInEffect;
-import com.twotoasters.jazzylistview.effects.TiltEffect;
-import com.twotoasters.jazzylistview.effects.TwirlEffect;
-import com.twotoasters.jazzylistview.effects.WaveEffect;
-import com.twotoasters.jazzylistview.effects.ZipperEffect;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Random;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, NavigationView.OnLongClickListener {
@@ -73,19 +49,24 @@ public class MainActivity extends AppCompatActivity
     ArrayList<String> arrayLin = new ArrayList<String>();
     private ListView mDrawerList;
     public ArrayAdapter<String> mAdapter;
-    //private Settings mSettings;
-
 
     Menu subMenu;
     int count = 0;
+
+    private SharedPreferences preferences;
+    private static final String PREFERENCES_NAME = "myPreferences";
+    private static final String PREFERENCES_TEXT_FIELD_JOB = "textFieldJob";
+    private static final String PREFERENCES_TEXT_FIELD_PLACE = "textFieldPlace";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        preferences = getSharedPreferences(PREFERENCES_NAME, Activity.MODE_PRIVATE);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
         mDrawerList = (ListView)findViewById(R.id.navList);
 
@@ -112,7 +93,6 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 count++;
-                //Toast.makeText(MainActivity.this, "Licznik: " + count, Toast.LENGTH_LONG).show();
 
                 if (InternetConnection.checkConnection(getApplicationContext())) {
                     if (TextUtils.isEmpty(mEditTextPraca.getText().toString()) && (TextUtils.isEmpty(mEditTextMiejsce.getText().toString()))) {
@@ -133,7 +113,6 @@ public class MainActivity extends AppCompatActivity
                         ListviewActivity.mListaTest1.clear();
                         ListviewActivity.mListaTest2.clear();
                         ListviewActivity.mListaLinki.clear();
-
                     }
                 }
                 else{
@@ -141,6 +120,96 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
+        restoreData();
+        if(mEditTextPraca.getText().toString() != "" || mEditTextMiejsce.getText().toString() != ""){
+            onDataRestoredAlert();
+        }
+    }
+
+    private void saveData() {
+        SharedPreferences.Editor preferencesEditor = preferences.edit();
+        String editTextDataJob = mEditTextPraca.getText().toString();
+        preferencesEditor.putString(PREFERENCES_TEXT_FIELD_JOB, editTextDataJob);
+        String editTextDataPlace = mEditTextMiejsce.getText().toString();
+        preferencesEditor.putString(PREFERENCES_TEXT_FIELD_PLACE, editTextDataPlace);
+        preferencesEditor.commit();
+    }
+
+    private void restoreData() {
+        String textFromPreferencesJob = preferences.getString(PREFERENCES_TEXT_FIELD_JOB, "");
+        mEditTextPraca.setText(textFromPreferencesJob);
+        String textFromPreferencesPlace = preferences.getString(PREFERENCES_TEXT_FIELD_PLACE, "");
+        mEditTextMiejsce.setText(textFromPreferencesPlace);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        saveData();
+    }
+
+    public void onDataRestoredAlert(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        if(mEditTextMiejsce.getText().toString().length() > 0 && mEditTextPraca.getText().toString().length() > 0){
+            builder.setMessage("Zapamiętano poprzednie parametry wyszukiwania: "
+                    + mEditTextPraca.getText().toString().trim() +", "+ mEditTextMiejsce.getText().toString().trim()
+                    +". Czy przywrócić zapamiętane parametry?");
+            builder.setPositiveButton("Tak", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            builder.setNegativeButton("Nie", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    mEditTextPraca.setText("");
+                    mEditTextMiejsce.setText("");
+                }
+            });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
+        else if(mEditTextPraca.getText().toString().length() > 0){
+            builder.setMessage("Zapamiętano poprzednie parametry wyszukiwania: "
+                    + mEditTextPraca.getText().toString().trim()
+                    +". Czy przywrócić zapamiętane parametry?");
+            builder.setPositiveButton("Tak", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            builder.setNegativeButton("Nie", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    mEditTextPraca.setText("");
+                }
+            });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
+        else if(mEditTextMiejsce.getText().toString().length() > 0){
+            builder.setMessage("Zapamiętano poprzednie parametry wyszukiwania: "
+                    + mEditTextMiejsce.getText().toString().trim()
+                    +". Czy przywrócić zapamiętane parametry?");
+            builder.setPositiveButton("Tak", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            builder.setNegativeButton("Nie", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    mEditTextMiejsce.setText("");
+                }
+            });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
+
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
