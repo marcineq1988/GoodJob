@@ -4,11 +4,14 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuInflater;
+import android.view.OrientationEventListener;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -32,9 +35,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, NavigationView.OnLongClickListener {
+
+    OrientationEventListener mOrientationListener;
 
     private Button mButtonSzukaj;
     private EditText mEditTextPraca;
@@ -47,6 +53,7 @@ public class MainActivity extends AppCompatActivity
     public static int animationNumberToPass = 1;
     ArrayList<String> arrayFav = new ArrayList<String>();
     ArrayList<String> arrayLin = new ArrayList<String>();
+    ArrayList<String> arrayFavAndLin = new ArrayList<String>();
     private ListView mDrawerList;
     public ArrayAdapter<String> mAdapter;
 
@@ -121,8 +128,20 @@ public class MainActivity extends AppCompatActivity
             }
         });
         restoreData();
-        if(mEditTextPraca.getText().toString() != "" || mEditTextMiejsce.getText().toString() != ""){
-            onDataRestoredAlert();
+
+        mOrientationListener = new OrientationEventListener(this, SensorManager.SENSOR_DELAY_NORMAL) {
+            @Override
+            public void onOrientationChanged(int orientation) {
+            }
+        };
+
+        if (mOrientationListener.canDetectOrientation() == true) {
+            mOrientationListener.enable();
+        } else {
+            mOrientationListener.disable();
+            if(mEditTextPraca.getText().toString() != "" || mEditTextMiejsce.getText().toString() != ""){
+                onDataRestoredAlert();
+            }
         }
     }
 
@@ -146,6 +165,12 @@ public class MainActivity extends AppCompatActivity
     protected void onStop() {
         super.onStop();
         saveData();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mOrientationListener.disable();
     }
 
     public void onDataRestoredAlert(){
@@ -221,14 +246,14 @@ public class MainActivity extends AppCompatActivity
         if (requestCode == 1) {
             if(resultCode == RESULT_OK){
 
-                int click  = 1;
-                click++;
-
                 ArrayList<String> passedText = data.getStringArrayListExtra("text");
                 ArrayList<String> passedLink = data.getStringArrayListExtra("link");
 
                 arrayFav.addAll(passedText);
                 arrayLin.addAll(passedLink);
+
+
+                onArrayMerge();
 
                 for (int i = 0; i < arrayFav.size(); i++) {
                     MenuItem item = subMenu.add(arrayFav.get(i));
@@ -237,7 +262,7 @@ public class MainActivity extends AppCompatActivity
                     item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
-                            Toast.makeText(MainActivity.this, "Otwieranie oferty... " + count, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "Otwieranie oferty...", Toast.LENGTH_SHORT).show();
                             Intent myBrowserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(arrayLin.get(count)));
                             myBrowserIntent.putExtra("paramPosition", count);
                             startActivity(myBrowserIntent);
@@ -250,6 +275,13 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    public void onArrayMerge(){
+        arrayFavAndLin.clear();
+        for(int i=0; i<arrayFav.size();i++){
+            arrayFavAndLin.add(arrayFav.get(i).toString()+arrayLin.get(i).toString());
+        }
+    }
+
     public void onExportPressed(){
 
         CharSequence colors[] = new CharSequence[] {"SMS", "E-mail", "Plik", "Wstecz"};
@@ -258,48 +290,39 @@ public class MainActivity extends AppCompatActivity
         builder.setItems(colors, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+
                 switch (which) {
                     case 0: //Sms
                         Uri uri = Uri.parse("smsto:");
                         Intent it = new Intent(Intent.ACTION_SENDTO, uri);
-
-                        it.putExtra("sms_body", arrayFav.toString() + " " + arrayLin.toString());
-
+                        it.putExtra("sms_body", arrayFavAndLin.toString());
                         startActivity(it);
-
-                        /*for (int i = 0; i < arrayFav.size(); i++) {
-                            it.putExtra("sms_body", i + 1 + ". " + arrayFav.get(i).toString() + ": " + arrayLin.get(i).toString());
-                            startActivity(it);
-                        }*/
                         break;
-
                     case 1: //Email
                         Intent intent = new Intent(Intent.ACTION_SEND);
                         intent.setType("text/html");
                         intent.putExtra(Intent.EXTRA_EMAIL, "emailaddress@emailaddress.com");
                         intent.putExtra(Intent.EXTRA_SUBJECT, "Oferty pracy");
-                        intent.putExtra(Intent.EXTRA_TEXT, arrayFav.toString() + "" + arrayLin.toString());
+                        intent.putExtra(Intent.EXTRA_TEXT, arrayFavAndLin.toString());
                         startActivity(Intent.createChooser(intent, "Send Email"));
                         break;
-
                     case 2: //Plik
                         File root = android.os.Environment.getExternalStorageDirectory();
                         File dir = new File(root.getAbsolutePath() + "/download");
-                        Toast.makeText(getApplicationContext(), "Eksport do pliku: " + dir.toString(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Eksport do pliku: " + dir.toString() + "/GoodJob.txt", Toast.LENGTH_LONG).show();
                         dir.mkdirs();
-                        File file = new File(dir, "myData.txt");
+                        File file = new File(dir, "GoodJob.txt");
                         try {
                             FileOutputStream f = new FileOutputStream(file);
                             PrintWriter pw = new PrintWriter(f);
-                            for (int i = 0; i < arrayFav.size(); i++) {
-                                pw.println(arrayFav.get(i).toString() + "" + arrayLin.toString());
-                            }
+                            pw.print("");
+                            pw.flush();
+                            pw.print(arrayFavAndLin.toString());
                             pw.flush();
                             pw.close();
                             f.close();
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
-
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
