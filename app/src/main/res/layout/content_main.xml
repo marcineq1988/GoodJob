@@ -4,9 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:background="@drawable/background_gradients"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingRight="15dp"
+    android:paddingTop="15dp"
+    android:paddingBottom="0dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior" tools:showIn="@layout/app_bar_main"
     tools:context=".MainActivity">
 
@@ -19,8 +19,8 @@
         android:layout_centerInParent="true"
         android:scaleType="fitCenter"
         app:riv_corner_radius="30dip"
-        app:riv_border_width="1dip"
-        app:riv_border_color="#FF7D4100"
+        app:riv_border_width="2dp"
+        app:riv_border_color="@color/circleImageBorderColor"
         app:riv_mutate_background="true"
         app:riv_tile_mode="repeat"
         app:riv_oval="true" />
@@ -28,25 +28,30 @@
     <EditText
         android:id="@+id/editTextPraca"
         android:hint="Chce pracowac jako..."
+        android:textColorHint="@color/textColor"
+        android:textColor="@color/textColor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:layout_marginLeft="37dp"
         android:layout_marginRight="33dp"
         android:textAlignment="gravity"
+        android:layout_above="@+id/editTextMiejsce"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"/>
 
     <EditText
         android:id="@+id/editTextMiejsce"
         android:hint="Chce pracowac w..."
+        android:textColorHint="@color/textColor"
+        android:textColor="@color/textColor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:layout_above="@+id/buttonSzukaj"
+        android:layout_above="@+id/buttonKasuj"
         android:layout_alignStart="@+id/editTextPraca"
         android:layout_alignEnd="@+id/editTextPraca"
-        android:layout_marginBottom="40dp"/>
+        android:layout_marginBottom="20dp"/>
 
     <Button
         android:id="@+id/buttonSzukaj"
@@ -59,6 +64,20 @@
         android:textSize="20dp"
         android:layout_marginBottom="0dp"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/buttonKasuj"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/clearshapebtn"
+        android:text="X"
+        android:layout_marginLeft="44dp"
+        android:layout_marginRight="45dp"
+        android:textSize="20dp"
+        android:layout_marginBottom="5dp"
+        android:layout_above="@+id/buttonSzukaj"
+        android:layout_alignParentLeft="true"
         android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

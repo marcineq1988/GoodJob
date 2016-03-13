@@ -1,0 +1,51 @@
+<selector
+xmlns:android="http://schemas.android.com/apk/res/android">
+
+<item android:state_pressed="true" >
+    <shape android:shape="oval">
+        <gradient
+            android:startColor="@color/buttonEnd"
+            android:centerColor="@color/buttonMiddle"
+            android:endColor="@color/buttonStart"
+            android:angle = "45" />
+        <corners
+            android:bottomRightRadius="0dp"
+            android:bottomLeftRadius="0dp"
+            android:topRightRadius="100dp"
+            android:topLeftRadius="100dp"
+            />
+    </shape>
+</item>
+
+<item android:state_focused="true" >
+    <shape android:shape="oval">
+        <gradient
+            android:startColor="@color/buttonEnd"
+            android:centerColor="@color/buttonMiddle"
+            android:endColor="@color/buttonStart"
+            android:angle = "45"/>
+        <corners
+            android:bottomRightRadius="0dp"
+            android:bottomLeftRadius="0dp"
+            android:topRightRadius="100dp"
+            android:topLeftRadius="100dp"
+            />
+    </shape>
+</item>
+
+<item>
+    <shape android:shape="oval">
+        <gradient
+            android:startColor="@color/buttonStart"
+            android:centerColor="@color/buttonMiddle"
+            android:endColor = "@color/buttonEnd"
+            android:angle = "45" />
+        <corners
+            android:bottomRightRadius="0dp"
+            android:bottomLeftRadius="0dp"
+            android:topRightRadius="100dp"
+            android:topLeftRadius="100dp"
+            />
+    </shape>
+</item>
+</selector>

@@ -2,11 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
-        <item android:id="@+id/nav_back" android:icon="@android:drawable/ic_menu_directions"
+        <item android:id="@+id/nav_back" android:icon="@android:drawable/ic_menu_revert"
             android:title="Cofnij" />
         <item android:id="@+id/nav_export" android:icon="@android:drawable/ic_menu_save"
             android:title="Eksportuj" />
-        <item android:id="@+id/nav_clear" android:icon="@android:drawable/ic_delete"
+        <item android:id="@+id/nav_clear" android:icon="@android:drawable/ic_menu_delete"
             android:title="Kasuj ulubione" />
         <item android:id="@+id/nav_info" android:icon="@android:drawable/ic_dialog_info"
             android:title="O aplikacji" />

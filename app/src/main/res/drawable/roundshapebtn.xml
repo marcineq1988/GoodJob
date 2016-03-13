@@ -2,17 +2,50 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:state_pressed="true" >
-        <shape xmlns:android="http://schemas.android.com/apk/res/android">
-            <stroke android:width="1dp"
-                android:color="@color/buttonSearchBegin"
+        <shape>
+            <gradient
+                android:startColor="@color/buttonEnd"
+                android:centerColor="@color/buttonMiddle"
+                android:endColor="@color/buttonStart"
+                android:angle = "45" />
+            <corners
+                android:bottomRightRadius="0dp"
+                android:bottomLeftRadius="0dp"
+                android:topRightRadius="100dp"
+                android:topLeftRadius="100dp"
                 />
+        </shape>
+    </item>
 
-            <padding android:left="1dp"
-                android:top="1dp"
-                android:right="1dp"
-                android:bottom="1dp"
+    <item android:state_focused="true" >
+        <shape>
+            <gradient
+                android:startColor="@color/buttonEnd"
+                android:centerColor="@color/buttonMiddle"
+                android:endColor="@color/buttonStart"
+                android:angle = "45"/>
+            <corners
+                android:bottomRightRadius="0dp"
+                android:bottomLeftRadius="0dp"
+                android:topRightRadius="100dp"
+                android:topLeftRadius="100dp"
                 />
-            <corners android:topLeftRadius="250dip" android:topRightRadius="250dip"/>
+        </shape>
+    </item>
+
+    <item>
+        <shape>
+            <gradient
+                android:startColor="@color/buttonStart"
+                android:centerColor="@color/buttonMiddle"
+                android:endColor = "@color/buttonEnd"
+                android:angle = "45" />
+            <corners
+                android:bottomRightRadius="0dp"
+                android:bottomLeftRadius="0dp"
+                android:topRightRadius="100dp"
+                android:topLeftRadius="100dp"
+                />
         </shape>
     </item>
 </selector>

@@ -4,12 +4,16 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.graphics.Color;
 import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Display;
 import android.view.MenuInflater;
 import android.view.OrientationEventListener;
 import android.view.View;
@@ -42,10 +46,10 @@ public class MainActivity extends AppCompatActivity
 
     OrientationEventListener mOrientationListener;
 
-    private Button mButtonSzukaj;
+    private Button mButtonSzukaj, mButtonKasuj;
     private EditText mEditTextPraca;
     private EditText mEditTextMiejsce;
-    private ImageView imageJobs;
+    private FloatingActionButton fab;
     private RoundedImageView circleImageBackground;
     public static String nazwaStanowiska;
     public static String nazwaMiejscowosci;
@@ -64,6 +68,7 @@ public class MainActivity extends AppCompatActivity
     private static final String PREFERENCES_NAME = "myPreferences";
     private static final String PREFERENCES_TEXT_FIELD_JOB = "textFieldJob";
     private static final String PREFERENCES_TEXT_FIELD_PLACE = "textFieldPlace";
+    private static final String IS_EMPTY = "isEmpty";
 
 
     @Override
@@ -89,6 +94,7 @@ public class MainActivity extends AppCompatActivity
         subMenu = mainMenu.addSubMenu("Ulubione oferty: ");
         circleImageBackground = (RoundedImageView)findViewById(R.id.imageCircleBackground);
         mButtonSzukaj = (Button) findViewById(R.id.buttonSzukaj);
+        mButtonKasuj = (Button) findViewById(R.id.buttonKasuj);
         mEditTextPraca = (EditText)findViewById(R.id.editTextPraca);
         //mEditTextPraca.setText("junior developer");
 
@@ -121,28 +127,37 @@ public class MainActivity extends AppCompatActivity
                         ListviewActivity.mListaTest2.clear();
                         ListviewActivity.mListaLinki.clear();
                     }
-                }
-                else{
+                } else {
                     Toast.makeText(MainActivity.this, "Brak połączenia z siecią!", Toast.LENGTH_LONG).show();
                 }
             }
         });
-        restoreData();
 
-        mOrientationListener = new OrientationEventListener(this, SensorManager.SENSOR_DELAY_NORMAL) {
+        mButtonKasuj.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onOrientationChanged(int orientation) {
+            public void onClick(View v) {
+                mEditTextPraca.setText("");
+                mEditTextMiejsce.setText("");
+                Toast.makeText(MainActivity.this, "Skasowano wprowadzone dane...", Toast.LENGTH_LONG).show();
             }
-        };
+        });
+        restoreData();
+    }
 
-        if (mOrientationListener.canDetectOrientation() == true) {
-            mOrientationListener.enable();
-        } else {
-            mOrientationListener.disable();
-            if(mEditTextPraca.getText().toString() != "" || mEditTextMiejsce.getText().toString() != ""){
-                onDataRestoredAlert();
-            }
-        }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        saveData();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
 
     private void saveData() {
@@ -161,17 +176,7 @@ public class MainActivity extends AppCompatActivity
         mEditTextMiejsce.setText(textFromPreferencesPlace);
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        saveData();
-    }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mOrientationListener.disable();
-    }
 
     public void onDataRestoredAlert(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -238,11 +243,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         super.onActivityResult(requestCode, resultCode, data);
-
         subMenu.clear();
-
         if (requestCode == 1) {
             if(resultCode == RESULT_OK){
 
@@ -251,7 +253,6 @@ public class MainActivity extends AppCompatActivity
 
                 arrayFav.addAll(passedText);
                 arrayLin.addAll(passedLink);
-
 
                 onArrayMerge();
 
@@ -283,7 +284,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void onExportPressed(){
-
         CharSequence colors[] = new CharSequence[] {"SMS", "E-mail", "Plik", "Wstecz"};
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Eksportuj jako:");

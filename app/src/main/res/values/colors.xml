@@ -1,15 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#ff8400</color>
-    <color name="colorPrimaryDark">#c16400</color>
-    <color name="colorAccent">#7a3f00</color>
-    <color name="backgroundColor">#FFFF8400</color>
-    <color name="buttonSearchBegin">#FFFF8400</color>
-    <color name="buttonSearchClick">#734d25</color>
-
-    <color name="blue_dark">#000561</color>
-    <color name="blue_light">#000dff</color>
-
-
+    <color name="colorPrimary">#006064</color>
+    <color name="colorPrimaryDark">#0097a7</color>
+    <color name="colorAccent">#006064</color>
+    <color name="backgroundColor">#00acc1</color>
+    <color name="buttonSearchBegin">#00acc1</color>
+    <color name="buttonSearchClick">#00838f</color>
     <color name="buttonSearchColor">#ffffff</color>
+
+    <color name="circleImageBorderColor">#006064</color>
+    <color name="textColor">#000000</color>
+
+    <color name="navigationDrawerColorStart">#006064</color>
+    <color name="navigationDrawerColorMiddle">#0097a7</color>
+    <color name="navigationDrawerColorEnd">#80deea</color>
+
+    <color name="mainScreenBackgroundColorStart">#80deea</color>
+    <color name="mainScreenBackgroundColorMiddle">#0097a7</color>
+    <color name="mainScreenBackgroundColorEnd">#006064</color>
+
+    <color name="buttonStart">#b2ebf2</color>
+    <color name="buttonMiddle">#00acc1</color>
+    <color name="buttonEnd">#006064</color>
+
+
 </resources>
