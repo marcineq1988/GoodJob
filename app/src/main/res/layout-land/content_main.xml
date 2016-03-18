@@ -28,7 +28,7 @@
 
         <EditText
             android:id="@+id/editTextPraca"
-            android:hint="Chce pracowac jako..."
+            android:hint="Podaj stanowisko..."
             android:textColorHint="@color/textColor"
             android:textColor="@color/textColor"
             android:layout_width="match_parent"
@@ -40,7 +40,7 @@
 
         <EditText
             android:id="@+id/editTextMiejsce"
-            android:hint="Chce pracowac w..."
+            android:hint="Podaj miejscowość..."
             android:textColorHint="@color/textColor"
             android:textColor="@color/textColor"
             android:layout_width="match_parent"
@@ -48,7 +48,6 @@
             android:gravity="center"
             android:layout_toRightOf="@+id/imageCircleBackground"
             android:layout_below="@+id/editTextPraca"
-
             android:layout_marginLeft="40dp"
             android:layout_marginTop="20dp"/>
 

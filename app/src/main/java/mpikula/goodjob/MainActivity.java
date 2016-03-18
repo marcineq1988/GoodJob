@@ -43,9 +43,6 @@ import java.util.Iterator;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, NavigationView.OnLongClickListener {
-
-    OrientationEventListener mOrientationListener;
-
     private Button mButtonSzukaj, mButtonKasuj;
     private EditText mEditTextPraca;
     private EditText mEditTextMiejsce;
@@ -60,10 +57,8 @@ public class MainActivity extends AppCompatActivity
     ArrayList<String> arrayFavAndLin = new ArrayList<String>();
     private ListView mDrawerList;
     public ArrayAdapter<String> mAdapter;
-
     Menu subMenu;
     int count = 0;
-
     private SharedPreferences preferences;
     private static final String PREFERENCES_NAME = "myPreferences";
     private static final String PREFERENCES_TEXT_FIELD_JOB = "textFieldJob";
@@ -78,16 +73,12 @@ public class MainActivity extends AppCompatActivity
         preferences = getSharedPreferences(PREFERENCES_NAME, Activity.MODE_PRIVATE);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
         mDrawerList = (ListView)findViewById(R.id.navList);
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         Menu mainMenu = navigationView.getMenu();
@@ -96,11 +87,7 @@ public class MainActivity extends AppCompatActivity
         mButtonSzukaj = (Button) findViewById(R.id.buttonSzukaj);
         mButtonKasuj = (Button) findViewById(R.id.buttonKasuj);
         mEditTextPraca = (EditText)findViewById(R.id.editTextPraca);
-        //mEditTextPraca.setText("junior developer");
-
         mEditTextMiejsce = (EditText)findViewById(R.id.editTextMiejsce);
-        //mEditTextMiejsce.setText("Wrocław");
-
         mButtonSzukaj.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -132,7 +119,6 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
-
         mButtonKasuj.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -175,8 +161,6 @@ public class MainActivity extends AppCompatActivity
         String textFromPreferencesPlace = preferences.getString(PREFERENCES_TEXT_FIELD_PLACE, "");
         mEditTextMiejsce.setText(textFromPreferencesPlace);
     }
-
-
 
     public void onDataRestoredAlert(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -239,7 +223,6 @@ public class MainActivity extends AppCompatActivity
             AlertDialog alert = builder.create();
             alert.show();
         }
-
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -247,18 +230,13 @@ public class MainActivity extends AppCompatActivity
         subMenu.clear();
         if (requestCode == 1) {
             if(resultCode == RESULT_OK){
-
                 ArrayList<String> passedText = data.getStringArrayListExtra("text");
                 ArrayList<String> passedLink = data.getStringArrayListExtra("link");
-
                 arrayFav.addAll(passedText);
                 arrayLin.addAll(passedLink);
-
                 onArrayMerge();
-
                 for (int i = 0; i < arrayFav.size(); i++) {
                     MenuItem item = subMenu.add(arrayFav.get(i));
-
                     final int count = i;
                     item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                         @Override

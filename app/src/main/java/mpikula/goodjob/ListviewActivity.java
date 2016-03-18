@@ -71,34 +71,23 @@ public class ListviewActivity extends ActionBarActivity {
     public ArrayList<String> companyList = new ArrayList<String>();
     public ArrayList<String> jobList = new ArrayList<String>();
 
-
     private TextView mSingleJobName;
-
     public ImageView mImageView;
-
     static int id = 1;
     static String idAsString;
-
     private ArrayAdapter<String> adapter;
     static JazzyListView mListView;
-    //public String doURLpraca = MainActivity.nazwaStanowiska;
-    //public String doURLmiejsce = MainActivity.nazwaMiejscowosci;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listview);
-
-
         mListView = (JazzyListView) findViewById(R.id.list);
         mListView.setTransitionEffect(new FanEffect());
         mListView.setItemsCanFocus(true);
         //Progress bar
         mListView.setEmptyView(findViewById(R.id.progressBarLoading));
-
         Toast.makeText(getApplicationContext(), "Wyszukiwanie ofert...", Toast.LENGTH_LONG).show();
-
         new NewThread().execute();
         mAdapter = new JobListAdapter(this, jobList);
         mListView.setAdapter(mAdapter);
@@ -110,9 +99,7 @@ public class ListviewActivity extends ActionBarActivity {
                 startActivity(myBrowserIntent);
             }
         });
-
         mSingleJobName = (TextView)findViewById(R.id.job_name);
-
         mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -147,8 +134,6 @@ public class ListviewActivity extends ActionBarActivity {
                 id = 12;
             }
             choose();
-
-            //sjfbkbkbdbgkjdg
 
             //Pozbywanie sie polskich znakow
             String doURLwork = mainActiv.nazwaStanowiska;

@@ -27,7 +27,7 @@
 
     <EditText
         android:id="@+id/editTextPraca"
-        android:hint="Chce pracowac jako..."
+        android:hint="Podaj stanowisko..."
         android:textColorHint="@color/textColor"
         android:textColor="@color/textColor"
         android:layout_width="match_parent"
@@ -42,7 +42,7 @@
 
     <EditText
         android:id="@+id/editTextMiejsce"
-        android:hint="Chce pracowac w..."
+        android:hint="Podaj miejscowość..."
         android:textColorHint="@color/textColor"
         android:textColor="@color/textColor"
         android:layout_width="match_parent"
